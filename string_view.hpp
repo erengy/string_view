@@ -83,11 +83,11 @@ public:
   }
 
   const_reverse_iterator crbegin() const noexcept {
-    return std::const_reverse_iterator(cend());
+    return const_reverse_iterator(cend());
   }
 
   const_reverse_iterator crend() const noexcept {
-    return std::const_reverse_iterator(cbegin());
+    return const_reverse_iterator(cbegin());
   }
 
   //////////////////////////////////////////////////////////////////////////////
