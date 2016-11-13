@@ -26,3 +26,4 @@ Alias|Type
 
 - [Working Draft, Standard for Programming Language C++](https://isocpp.org/std/the-standard) *(N4606, 2016-07-12)*
 - [std::basic_string_view - cppreference.com](http://en.cppreference.com/w/cpp/string/basic_string_view)
+- [libc++/string_view](https://llvm.org/svn/llvm-project/libcxx/trunk/include/string_view)
