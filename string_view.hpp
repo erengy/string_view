@@ -8,6 +8,9 @@
 #include <stdexcept>
 #include <utility>
 
+// TODO: Check relaxed constexpr restrictions
+#define constexpr14
+
 namespace erengy {
 
 template<class charT, class traits = std::char_traits<charT>>
@@ -146,18 +149,18 @@ public:
   //////////////////////////////////////////////////////////////////////////////
   // Modifiers
 
-  constexpr void remove_prefix(size_type n) {
+  constexpr14 void remove_prefix(size_type n) {
     // Requires: n <= size().
     data_ += n;
     size_ -= n;
   }
 
-  constexpr void remove_suffix(size_type n) {
+  constexpr14 void remove_suffix(size_type n) {
     // Requires: n <= size().
     size_ -= n;
   }
 
-  constexpr void swap(basic_string_view& s) noexcept {
+  constexpr14 void swap(basic_string_view& s) noexcept {
     std::swap(*this, s);
   }
 
@@ -182,112 +185,112 @@ public:
                              std::min(n, size() - pos));  // rlen
   }
 
-  constexpr int compare(basic_string_view s) const noexcept {
+  constexpr14 int compare(basic_string_view str) const noexcept {
     const auto rlen = std::min(size(), str.size());
     auto result = traits::compare(data(), str.data(), rlen);
     if (result == 0)
       result = size() == str.size() ? 0 : (size() < str.size() ? -1 : 1);
     return result;
   }
-  constexpr int compare(size_type pos1, size_type n1, basic_string_view s) const {
+  constexpr14 int compare(size_type pos1, size_type n1, basic_string_view s) const {
     return substr(pos1, n1).compare(str);
   }
-  constexpr int compare(size_type pos1, size_type n1, basic_string_view s,
-                        size_type pos2, size_type n2) const {
+  constexpr14 int compare(size_type pos1, size_type n1, basic_string_view s,
+                          size_type pos2, size_type n2) const {
     return substr(pos1, n1).compare(str.substr(pos2, n2));
   }
-  constexpr int compare(const_pointer s) const {
+  constexpr14 int compare(const_pointer s) const {
     return compare(basic_string_view(s));
   }
-  constexpr int compare(size_type pos1, size_type n1, const_pointer s) const {
+  constexpr14 int compare(size_type pos1, size_type n1, const_pointer s) const {
     return substr(pos1, n1).compare(basic_string_view(s));
   }
-  constexpr int compare(size_type pos1, size_type n1, const_pointer s, size_type n2) const {
+  constexpr14 int compare(size_type pos1, size_type n1, const_pointer s, size_type n2) const {
     return substr(pos1, n1).compare(basic_string_view(s, n2));
   }
 
-  constexpr size_type find(basic_string_view s, size_type pos = 0) const noexcept {
+  constexpr14 size_type find(basic_string_view s, size_type pos = 0) const noexcept {
     auto it = std::search(s.begin() + pos, s.end(), begin(), end());
     return it != s.end() ? std::distance(s.begin(), it) : npos;
   }
-  constexpr size_type find(value_type c, size_type pos = 0) const noexcept {
+  constexpr14 size_type find(value_type c, size_type pos = 0) const noexcept {
     return find(basic_string_view(&c, 1), pos);
   }
-  constexpr size_type find(const_pointer s, size_type pos, size_type n) const {
+  constexpr14 size_type find(const_pointer s, size_type pos, size_type n) const {
     return find(basic_string_view(s, n), pos);
   }
-  constexpr size_type find(const_pointer s, size_type pos = 0) const {
+  constexpr14 size_type find(const_pointer s, size_type pos = 0) const {
     return find(basic_string_view(s), pos);
   }
 
-  constexpr size_type rfind(basic_string_view s, size_type pos = npos) const noexcept {
+  constexpr14 size_type rfind(basic_string_view s, size_type pos = npos) const noexcept {
     auto last = s.end() - (pos == npos ? 0 : pos);
     auto it = std::find_end(s.begin(), last, begin(), end());
     return it != last ? std::distance(s.begin(), it) : npos;
   }
-  constexpr size_type rfind(value_type c, size_type pos = npos) const noexcept {
+  constexpr14 size_type rfind(value_type c, size_type pos = npos) const noexcept {
     return rfind(basic_string_view(&c, 1), pos);
   }
-  constexpr size_type rfind(const_pointer s, size_type pos, size_type n) const {
+  constexpr14 size_type rfind(const_pointer s, size_type pos, size_type n) const {
     return rfind(basic_string_view(s, n), pos);
   }
-  constexpr size_type rfind(const_pointer s, size_type pos = npos) const {
+  constexpr14 size_type rfind(const_pointer s, size_type pos = npos) const {
     return rfind(basic_string_view(s), pos);
   }
 
-  constexpr size_type find_first_of(basic_string_view s, size_type pos = 0) const noexcept {
+  constexpr14 size_type find_first_of(basic_string_view s, size_type pos = 0) const noexcept {
     auto it = std::find_first_of(s.begin() + pos, s.end(), begin(), end());
     return it != s.end() ? std::distance(s.begin(), it) : npos;
   }
-  constexpr size_type find_first_of(value_type c, size_type pos = 0) const noexcept {
+  constexpr14 size_type find_first_of(value_type c, size_type pos = 0) const noexcept {
     return find_first_of(basic_string_view(&c, 1), pos);
   }
-  constexpr size_type find_first_of(const_pointer s, size_type pos, size_type n) const {
+  constexpr14 size_type find_first_of(const_pointer s, size_type pos, size_type n) const {
     return find_first_of(basic_string_view(s, n), pos);
   }
-  constexpr size_type find_first_of(const_pointer s, size_type pos = 0) const {
+  constexpr14 size_type find_first_of(const_pointer s, size_type pos = 0) const {
     return find_first_of(basic_string_view(s), pos);
   }
 
-  constexpr size_type find_last_of(basic_string_view s, size_type pos = npos) const noexcept {
+  constexpr14 size_type find_last_of(basic_string_view s, size_type pos = npos) const noexcept {
     // TODO
     return npos;
   }
-  constexpr size_type find_last_of(value_type c, size_type pos = npos) const noexcept {
+  constexpr14 size_type find_last_of(value_type c, size_type pos = npos) const noexcept {
     return find_last_of(basic_string_view(&c, 1), pos);
   }
-  constexpr size_type find_last_of(const_pointer s, size_type pos, size_type n) const {
+  constexpr14 size_type find_last_of(const_pointer s, size_type pos, size_type n) const {
     return find_last_of(basic_string_view(s, n), pos);
   }
-  constexpr size_type find_last_of(const_pointer s, size_type pos = npos) const {
+  constexpr14 size_type find_last_of(const_pointer s, size_type pos = npos) const {
     return find_last_of(basic_string_view(s), pos);
   }
 
-  constexpr size_type find_first_not_of(basic_string_view s, size_type pos = 0) const noexcept {
+  constexpr14 size_type find_first_not_of(basic_string_view s, size_type pos = 0) const noexcept {
     // TODO
     return npos;
   }
-  constexpr size_type find_first_not_of(value_type c, size_type pos = 0) const noexcept {
+  constexpr14 size_type find_first_not_of(value_type c, size_type pos = 0) const noexcept {
     return find_first_not_of(basic_string_view(&c, 1), pos);
   }
-  constexpr size_type find_first_not_of(const_pointer s, size_type pos, size_type n) const {
+  constexpr14 size_type find_first_not_of(const_pointer s, size_type pos, size_type n) const {
     return find_first_not_of(basic_string_view(s, n), pos);
   }
-  constexpr size_type find_first_not_of(const_pointer s, size_type pos = 0) const {
+  constexpr14 size_type find_first_not_of(const_pointer s, size_type pos = 0) const {
     return find_first_not_of(basic_string_view(s), pos);
   }
 
-  constexpr size_type find_last_not_of(basic_string_view s, size_type pos = npos) const noexcept {
+  constexpr14 size_type find_last_not_of(basic_string_view s, size_type pos = npos) const noexcept {
     // TODO
     return npos;
   }
-  constexpr size_type find_last_not_of(value_type c, size_type pos = npos) const noexcept {
+  constexpr14 size_type find_last_not_of(value_type c, size_type pos = npos) const noexcept {
     return find_last_not_of(basic_string_view(&c, 1), pos);
   }
-  constexpr size_type find_last_not_of(const_pointer s, size_type pos, size_type n) const {
+  constexpr14 size_type find_last_not_of(const_pointer s, size_type pos, size_type n) const {
     return find_last_not_of(basic_string_view(s, n), pos);
   }
-  constexpr size_type find_last_not_of(const_pointer s, size_type pos = npos) const {
+  constexpr14 size_type find_last_not_of(const_pointer s, size_type pos = npos) const {
     return find_last_not_of(basic_string_view(s), pos);
   }
 
@@ -296,46 +299,47 @@ private:
   size_type size_;
 };
 
-//////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 // Non-member comparison functions
+// TODO: Provide sufficient additional overloads
 
 template<class charT, class traits>
-constexpr bool operator==(basic_string_view<charT, traits> lhs,
-                          basic_string_view<charT, traits> rhs) noexcept {
+constexpr14 bool operator==(basic_string_view<charT, traits> lhs,
+                            basic_string_view<charT, traits> rhs) noexcept {
   return lhs.compare(rhs) == 0;
 }
 
 template<class charT, class traits>
-constexpr bool operator!=(basic_string_view<charT, traits> lhs,
-                          basic_string_view<charT, traits> rhs) noexcept {
+constexpr14 bool operator!=(basic_string_view<charT, traits> lhs,
+                            basic_string_view<charT, traits> rhs) noexcept {
   return lhs.compare(rhs) != 0;
 }
 
 template<class charT, class traits>
-constexpr bool operator< (basic_string_view<charT, traits> lhs,
-                          basic_string_view<charT, traits> rhs) noexcept {
+constexpr14 bool operator< (basic_string_view<charT, traits> lhs,
+                            basic_string_view<charT, traits> rhs) noexcept {
   return lhs.compare(rhs) < 0;
 }
 
 template<class charT, class traits>
-constexpr bool operator> (basic_string_view<charT, traits> lhs,
-                          basic_string_view<charT, traits> rhs) noexcept {
+constexpr14 bool operator> (basic_string_view<charT, traits> lhs,
+                            basic_string_view<charT, traits> rhs) noexcept {
   return lhs.compare(rhs) > 0;
 }
 
 template<class charT, class traits>
-constexpr bool operator<=(basic_string_view<charT, traits> lhs,
-                          basic_string_view<charT, traits> rhs) noexcept {
+constexpr14 bool operator<=(basic_string_view<charT, traits> lhs,
+                            basic_string_view<charT, traits> rhs) noexcept {
   return lhs.compare(rhs) <= 0;
 }
 
 template<class charT, class traits>
-constexpr bool operator>=(basic_string_view<charT, traits> lhs,
-                          basic_string_view<charT, traits> rhs) noexcept {
+constexpr14 bool operator>=(basic_string_view<charT, traits> lhs,
+                            basic_string_view<charT, traits> rhs) noexcept {
   return lhs.compare(rhs) >= 0;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 // Inserters and extractors
 
 template<class charT, class traits>
@@ -344,7 +348,7 @@ std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, traits>&
   return os << str.to_string();
 }
 
-//////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 // Typedef names
 
 using string_view = basic_string_view<char>;
@@ -352,7 +356,7 @@ using u16string_view = basic_string_view<char16_t>;
 using u32string_view = basic_string_view<char32_t>;
 using wstring_view = basic_string_view<wchar_t>;
 
-//////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 // TODO: Hash support
 
 template<class T> struct hash;
