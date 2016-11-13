@@ -178,8 +178,8 @@ public:
     if (pos > size()) {
       throw std::out_of_range("basic_string_view::substr");
     }
-    const auto rlen = std::min(n, size() - pos);
-    return basic_string_view(data() + pos, rlen);
+    return basic_string_view(data() + pos,
+                             std::min(n, size() - pos));  // rlen
   }
 
   constexpr int compare(basic_string_view s) const noexcept {
