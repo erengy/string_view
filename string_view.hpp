@@ -55,6 +55,11 @@ public:
     // Requires: [str, str + len) is a valid range.
   }
 
+  template<class allocator>
+  constexpr basic_string_view(const std::basic_string<charT, traits, allocator>& str) noexcept
+      : data_(str.data()), size_(str.size()) {
+  }
+
   //////////////////////////////////////////////////////////////////////////////
   // Iterator support
 
