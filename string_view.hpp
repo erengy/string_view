@@ -210,8 +210,8 @@ public:
   }
 
   constexpr14 size_type find(basic_string_view s, size_type pos = 0) const noexcept {
-    auto it = std::search(s.begin() + pos, s.end(), begin(), end());
-    return it != s.end() ? std::distance(s.begin(), it) : npos;
+    auto it = std::search(begin() + pos, end(), s.begin(), s.end());
+    return it != end() ? std::distance(begin(), it) : npos;
   }
   constexpr14 size_type find(value_type c, size_type pos = 0) const noexcept {
     return find(basic_string_view(&c, 1), pos);
@@ -224,9 +224,9 @@ public:
   }
 
   constexpr14 size_type rfind(basic_string_view s, size_type pos = npos) const noexcept {
-    auto last = s.end() - (pos == npos ? 0 : pos);
-    auto it = std::find_end(s.begin(), last, begin(), end());
-    return it != last ? std::distance(s.begin(), it) : npos;
+    auto last = (pos == npos) ? end() : begin() + pos;
+    auto it = std::find_end(begin(), last, s.begin(), s.end());
+    return it != last ? std::distance(begin(), it) : npos;
   }
   constexpr14 size_type rfind(value_type c, size_type pos = npos) const noexcept {
     return rfind(basic_string_view(&c, 1), pos);
@@ -239,8 +239,8 @@ public:
   }
 
   constexpr14 size_type find_first_of(basic_string_view s, size_type pos = 0) const noexcept {
-    auto it = std::find_first_of(s.begin() + pos, s.end(), begin(), end());
-    return it != s.end() ? std::distance(s.begin(), it) : npos;
+    auto it = std::find_first_of(begin() + pos, end(), s.begin(), s.end());
+    return it != end() ? std::distance(begin(), it) : npos;
   }
   constexpr14 size_type find_first_of(value_type c, size_type pos = 0) const noexcept {
     return find_first_of(basic_string_view(&c, 1), pos);
@@ -253,8 +253,8 @@ public:
   }
 
   constexpr14 size_type find_last_of(basic_string_view s, size_type pos = npos) const noexcept {
-    // TODO
-    return npos;
+    auto it = std::find_first_of(rbegin(), rend() - pos, s.begin(), s.end());
+    return it != rend() ? std::distance(begin(), it.base()) - 1 : npos;
   }
   constexpr14 size_type find_last_of(value_type c, size_type pos = npos) const noexcept {
     return find_last_of(basic_string_view(&c, 1), pos);
@@ -267,8 +267,11 @@ public:
   }
 
   constexpr14 size_type find_first_not_of(basic_string_view s, size_type pos = 0) const noexcept {
-    // TODO
-    return npos;
+    auto it = std::find_if(begin() + pos, end(),
+        [&s](const value_type& c) {
+          return std::find(s.begin(), s.end(), c) == s.end();
+        });
+    return it != end() ? std::distance(begin(), it) : npos;
   }
   constexpr14 size_type find_first_not_of(value_type c, size_type pos = 0) const noexcept {
     return find_first_not_of(basic_string_view(&c, 1), pos);
@@ -281,8 +284,11 @@ public:
   }
 
   constexpr14 size_type find_last_not_of(basic_string_view s, size_type pos = npos) const noexcept {
-    // TODO
-    return npos;
+    auto it = std::find_if(rbegin(), rend() - pos,
+        [&s](const value_type& c) {
+          return std::find(s.begin(), s.end(), c) == s.end();
+        });
+    return it != rend() ? std::distance(begin(), it.base()) - 1 : npos;
   }
   constexpr14 size_type find_last_not_of(value_type c, size_type pos = npos) const noexcept {
     return find_last_not_of(basic_string_view(&c, 1), pos);
