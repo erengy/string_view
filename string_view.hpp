@@ -184,16 +184,10 @@ public:
 
   constexpr int compare(basic_string_view s) const noexcept {
     const auto rlen = std::min(size(), str.size());
-    const auto result = traits::compare(data(), str.data(), rlen);
-    if (result != 0) {
-      return result;
-    } else if (size() < str.size()) {
-      return -1;
-    } else if (size() == str.size()) {
-      return 0;
-    } else if (size() > str.size()) {
-      return 1;
-    }
+    auto result = traits::compare(data(), str.data(), rlen);
+    if (result == 0)
+      result = size() == str.size() ? 0 : (size() < str.size() ? -1 : 1);
+    return result;
   }
   constexpr int compare(size_type pos1, size_type n1, basic_string_view s) const {
     return substr(pos1, n1).compare(str);
